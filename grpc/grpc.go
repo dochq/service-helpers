@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	Time                  = 5 * time.Second // wait X seconds, then send ping if there is no activity
-	Timeout               = 5 * time.Second // wait for ping back
+	Time                  = 5 * time.Second
+	Timeout               = 5 * time.Second
 	MaxConnectionAgeGrace = 10 * time.Second
 )
 
@@ -41,3 +41,10 @@ var ClientKeepaliveParams = grpc.WithKeepaliveParams(keepalive.ClientParameters{
 	// keepalive pings will be sent.
 	PermitWithoutStream: true,
 })
+
+func NewServer(opt ...grpc.ServerOption) *grpc.Server {
+	grpcServer := grpc.NewServer(
+		ServerKeepaliveParams, opt,
+	)
+	return grpcServer
+}
