@@ -13,7 +13,7 @@ const (
 	MaxConnectionAgeGrace = 10 * time.Second
 )
 
-var keepaliveParams = grpc.KeepaliveParams(keepalive.ServerParameters{
+var KeepaliveParams = grpc.KeepaliveParams(keepalive.ServerParameters{
 	// After a duration of this time if the server doesn't see any activity it
 	// pings the client to see if the transport is still alive.
 	// If set below 1s, a minimum value of 1s will be used instead.
