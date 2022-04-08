@@ -48,3 +48,15 @@ func NewServer(opt ...grpc.ServerOption) *grpc.Server {
 	)
 	return grpcServer
 }
+
+func Dial(target string, opt ...grpc.DialOption) (*grpc.ClientConn, error) {
+	conn, err := grpc.Dial(
+		"dns:///"+target,
+		append(
+			opt,
+			grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`),
+			ClientKeepaliveParams,
+		)...,
+	)
+	return conn, err
+}
