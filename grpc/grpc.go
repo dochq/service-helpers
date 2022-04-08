@@ -44,7 +44,7 @@ var ClientKeepaliveParams = grpc.WithKeepaliveParams(keepalive.ClientParameters{
 
 func NewServer(opt ...grpc.ServerOption) *grpc.Server {
 	grpcServer := grpc.NewServer(
-		ServerKeepaliveParams, opt,
+		append(opt, ServerKeepaliveParams)...,
 	)
 	return grpcServer
 }
