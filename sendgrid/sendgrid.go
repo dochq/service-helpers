@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	"github.com/getsentry/sentry-go"
 	"github.com/sendgrid/rest"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
@@ -18,14 +17,16 @@ type FileInfo struct {
 	Buffer []byte
 }
 
-func InitSendgrid(dsn, key string) error {
-	clientOptions := sentry.ClientOptions(sentry.ClientOptions{
-		Dsn:              dsn,
-		AttachStacktrace: true,
-	})
-	if err := sentry.Init(clientOptions); err != nil {
-		return err
-	}
+func InitSendgrid(key string) error {
+	/*
+		clientOptions := sentry.ClientOptions(sentry.ClientOptions{
+			Dsn:              dsn,
+			AttachStacktrace: true,
+		})
+		if err := sentry.Init(clientOptions); err != nil {
+			return err
+		}
+	*/
 	sendgridClient = sendgrid.NewSendClient(key)
 	return nil
 }
@@ -70,7 +71,7 @@ func SendGridEmail(sendGridEmailTmpl string, fromEmail *mail.Email, receipients 
 	}
 
 	if res.StatusCode != 202 {
-		return res, fmt.Errorf("sendgridClient.Send: incorrect status code returned: %v, %s", res.StatusCode, res.Body)
+		return res, fmt.Errorf("res.StatusCode: %d, %s", res.StatusCode, res.Body)
 	}
 
 	return res, nil
