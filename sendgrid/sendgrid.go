@@ -30,7 +30,7 @@ func InitSendgrid(dsn, key string) error {
 	return nil
 }
 
-func SendGridEmail(sendGridEmailTmpl string, fromEmail *mail.Email, receipients map[string][]*mail.Email, subject, body string, files []*FileInfo) (*rest.Response, error) {
+func SendGridEmail(sendGridEmailTmpl string, fromEmail *mail.Email, receipients map[string][]*mail.Email, subject string, dynamicTemplateData map[string]interface{}, files []*FileInfo) (*rest.Response, error) {
 	var peopleToEmail []*mail.Email
 
 	for _, receipient := range receipients["to"] {
@@ -49,11 +49,8 @@ func SendGridEmail(sendGridEmailTmpl string, fromEmail *mail.Email, receipients 
 		},
 		Personalizations: []*mail.Personalization{
 			{
-				To: peopleToEmail,
-				DynamicTemplateData: map[string]interface{}{
-					"email_subject": subject,
-					"email_body":    body,
-				},
+				To:                  peopleToEmail,
+				DynamicTemplateData: dynamicTemplateData,
 			},
 		},
 	}
