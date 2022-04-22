@@ -32,10 +32,16 @@ func InitSendgrid(key string) error {
 }
 
 func SendGridEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *mail.Email, receipients map[string][]*mail.Email, subject string, dynamicTemplateData map[string]interface{}, files []*FileInfo) (*rest.Response, error) {
-	var peopleToEmail, peoplceBccEmail []*mail.Email
+	var peopleToEmail, peoplceCcEmail, peoplceBccEmail []*mail.Email
 
 	for _, receipient := range receipients["to"] {
 		peopleToEmail = append(peopleToEmail, &mail.Email{
+			Name:    receipient.Name,
+			Address: receipient.Address,
+		})
+	}
+	for _, receipient := range receipients["cc"] {
+		peoplceCcEmail = append(peoplceCcEmail, &mail.Email{
 			Name:    receipient.Name,
 			Address: receipient.Address,
 		})
@@ -57,11 +63,13 @@ func SendGridEmail(sendGridEmailTmpl string, headers map[string]string, fromEmai
 		Personalizations: []*mail.Personalization{
 			{
 				To:                  peopleToEmail,
+				CC:                  peoplceCcEmail,
 				BCC:                 peoplceBccEmail,
 				DynamicTemplateData: dynamicTemplateData,
 			},
 		},
 	}
+
 	if headers != nil {
 		sendData.Headers = headers
 	}
