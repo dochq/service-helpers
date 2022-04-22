@@ -31,7 +31,7 @@ func InitSendgrid(key string) error {
 	return nil
 }
 
-func SendGridEmail(sendGridEmailTmpl string, fromEmail *mail.Email, receipients map[string][]*mail.Email, headers map[string]string, subject string, dynamicTemplateData map[string]interface{}, files []*FileInfo) (*rest.Response, error) {
+func SendGridEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *mail.Email, receipients map[string][]*mail.Email, subject string, dynamicTemplateData map[string]interface{}, files []*FileInfo) (*rest.Response, error) {
 	var peopleToEmail, peoplceBccEmail []*mail.Email
 
 	for _, receipient := range receipients["to"] {
