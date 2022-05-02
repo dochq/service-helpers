@@ -3,6 +3,8 @@ package sendgrid
 import (
 	"encoding/base64"
 	"fmt"
+	"net/http"
+	"time"
 
 	"github.com/sendgrid/rest"
 	"github.com/sendgrid/sendgrid-go"
@@ -27,6 +29,13 @@ func InitSendgrid(key string) error {
 			return err
 		}
 	*/
+	sendgrid.DefaultClient = &rest.Client{
+		HTTPClient: &http.Client{
+			Transport: &http.Transport{
+				TLSHandshakeTimeout: time.Minute,
+			},
+		},
+	}
 	sendgridClient = sendgrid.NewSendClient(key)
 	return nil
 }
