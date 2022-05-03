@@ -64,7 +64,6 @@ func SendGridEmail(sendGridEmailTmpl string, headers map[string]string, fromEmai
 
 	sendData := &mail.SGMailV3{
 		TemplateID: sendGridEmailTmpl,
-		Subject:    subject,
 		From: &mail.Email{
 			Name:    fromEmail.Name,
 			Address: fromEmail.Address,
@@ -77,6 +76,10 @@ func SendGridEmail(sendGridEmailTmpl string, headers map[string]string, fromEmai
 				DynamicTemplateData: dynamicTemplateData,
 			},
 		},
+	}
+
+	if subject != "" {
+		sendData.Subject = subject
 	}
 
 	if headers != nil {
