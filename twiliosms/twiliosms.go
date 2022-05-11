@@ -2,19 +2,18 @@ package twiliosms
 
 import (
 	"encoding/base64"
-	"encoding/json"
 	"net/http"
-	"os"
+	"net/url"
 
-	"packages/network"
+	"github.com/dochq/service-helpers/network"
 )
 
-var twilioAccountSid, twilioAuthTokent, url string
+var twilioAccountSid, twilioAuthTokent, twilioUrl string
 
 func InitTwilioSms(accountSid, authTokent string) {
 	twilioAccountSid = accountSid
 	twilioAuthTokent = authTokent
-	url = "https://api.twilio.com/2010-04-01/Accounts/" + twilioAccountSid + "/Messages.json"
+	twilioUrl = "https://api.twilio.com/2010-04-01/Accounts/" + twilioAccountSid + "/Messages.json"
 }
 
 func SendSms(to, from, content string) (resp *http.Response, body string, err error) {
@@ -29,8 +28,7 @@ func SendSms(to, from, content string) (resp *http.Response, body string, err er
 		"Content-Type":  "application/x-www-form-urlencoded",
 	}
 
-	resp, body, err = network.SendRequest("POST", url, msgData.Encode(), headers)
-	req, err := http.NewRequest("POST", url, &formData)
+	resp, body, err = network.SendRequest("POST", twilioUrl, msgData.Encode(), headers)
 
 	return resp, body, err
 }
