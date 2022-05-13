@@ -10,10 +10,10 @@ import (
 
 var twilioAccountSid, twilioAuthTokent, twilioUrl string
 
-func InitTwilioSms(accountSid, authTokent string) {
+func InitTwilioSms(accountSid, authTokent, url string) {
 	twilioAccountSid = accountSid
 	twilioAuthTokent = authTokent
-	twilioUrl = "https://api.twilio.com/2010-04-01/Accounts/" + twilioAccountSid + "/Messages.json"
+	twilioUrl = url
 }
 
 func SendSms(to, from, content string) (resp *http.Response, body string, err error) {
