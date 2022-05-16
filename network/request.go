@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func SendRequest(method, link, data string, headers map[string]string) (resp *http.Response, body string, err error) {
@@ -14,6 +15,11 @@ func SendRequest(method, link, data string, headers map[string]string) (resp *ht
 	req.Close = true
 	for key := range headers {
 		req.Header.Set(key, headers[key])
+	}
+	http.DefaultClient = &http.Client{
+		Transport: &http.Transport{
+			TLSHandshakeTimeout: time.Minute,
+		},
 	}
 	resp, err = http.DefaultClient.Do(req)
 	if err != nil {
