@@ -7,6 +7,14 @@ import (
 	"time"
 )
 
+func init() {
+	http.DefaultClient = &http.Client{
+		Transport: &http.Transport{
+			TLSHandshakeTimeout: time.Minute,
+		},
+	}
+}
+
 func SendRequest(method, link, data string, headers map[string]string) (resp *http.Response, body string, err error) {
 	req, err := http.NewRequest(method, link, strings.NewReader(data))
 	if err != nil {
@@ -15,11 +23,6 @@ func SendRequest(method, link, data string, headers map[string]string) (resp *ht
 	req.Close = true
 	for key := range headers {
 		req.Header.Set(key, headers[key])
-	}
-	http.DefaultClient = &http.Client{
-		Transport: &http.Transport{
-			TLSHandshakeTimeout: time.Minute,
-		},
 	}
 	resp, err = http.DefaultClient.Do(req)
 	if err != nil {
