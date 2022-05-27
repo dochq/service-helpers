@@ -8,14 +8,16 @@ import (
 	"github.com/dochq/service-helpers/network"
 )
 
-var twilioAccountSid, twilioAuthTokent, twilioUrl string
+var twilioAccountSid, twilioAuthTokent, twilioURL string
 
+// InitTwilioSms - initialize needed variables
 func InitTwilioSms(accountSid, authTokent, url string) {
 	twilioAccountSid = accountSid
 	twilioAuthTokent = authTokent
-	twilioUrl = url
+	twilioURL = url
 }
 
+// SendSms - send an sms via Twilio
 func SendSms(to, from, content string) (resp *http.Response, body string, err error) {
 	msgData := url.Values{}
 	msgData.Set("To", to)
@@ -28,7 +30,7 @@ func SendSms(to, from, content string) (resp *http.Response, body string, err er
 		"Content-Type":  "application/x-www-form-urlencoded",
 	}
 
-	resp, body, err = network.SendRequest("POST", twilioUrl, msgData.Encode(), headers)
+	resp, body, err = network.SendRequest("POST", twilioURL, msgData.Encode(), headers)
 
 	return resp, body, err
 }

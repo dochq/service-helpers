@@ -1,18 +1,28 @@
 package grpc
 
 import (
+	"context"
 	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
+	"google.golang.org/grpc/metadata"
 )
+
+type contextKey string
 
 const (
-	Time                  = 5 * time.Second
-	Timeout               = 5 * time.Second
+	// Time  - Keepalive Server Parameter
+	Time = 5 * time.Second
+	// Timeout  - Keepalive Server Parameter
+	Timeout = 5 * time.Second
+	// MaxConnectionAgeGrace  - Keepalive Server Parameter
 	MaxConnectionAgeGrace = 10 * time.Second
+	// EmptyContextKey - empty context key
+	EmptyContextKey = contextKey("")
 )
 
+// ServerKeepaliveParams - gRPC Server Keepalive Parameters
 var ServerKeepaliveParams = grpc.KeepaliveParams(keepalive.ServerParameters{
 	// After a duration of this time if the server doesn't see any activity it
 	// pings the client to see if the transport is still alive.
@@ -27,6 +37,7 @@ var ServerKeepaliveParams = grpc.KeepaliveParams(keepalive.ServerParameters{
 	MaxConnectionAgeGrace: MaxConnectionAgeGrace,
 })
 
+// ClientKeepaliveParams - gRPC Client Keepalive Parameters
 var ClientKeepaliveParams = grpc.WithKeepaliveParams(keepalive.ClientParameters{
 	// After a duration of this time if the client doesn't see any activity it
 	// pings the server to see if the transport is still alive.
@@ -42,6 +53,7 @@ var ClientKeepaliveParams = grpc.WithKeepaliveParams(keepalive.ClientParameters{
 	PermitWithoutStream: true,
 })
 
+// NewServer - create a gRPC Server
 func NewServer(opt ...grpc.ServerOption) *grpc.Server {
 	grpcServer := grpc.NewServer(
 		append(opt, ServerKeepaliveParams)...,
@@ -49,6 +61,7 @@ func NewServer(opt ...grpc.ServerOption) *grpc.Server {
 	return grpcServer
 }
 
+// Dial - establish a gRPC Connection
 func Dial(target string, opt ...grpc.DialOption) (*grpc.ClientConn, error) {
 	conn, err := grpc.Dial(
 		"dns:///"+target,
@@ -59,4 +72,17 @@ func Dial(target string, opt ...grpc.DialOption) (*grpc.ClientConn, error) {
 		)...,
 	)
 	return conn, err
+}
+
+// GetContextWithMetaAuth - add a key and a value into the Context Meta Data
+func GetContextWithMetaAuth(ctx context.Context, key, value string) context.Context {
+	return context.WithValue(
+		metadata.NewOutgoingContext(
+			ctx,
+			metadata.New(map[string]string{
+				key: value,
+			}),
+		),
+		EmptyContextKey, "",
+	)
 }

@@ -13,12 +13,14 @@ import (
 
 var sendgridClient *sendgrid.Client
 
+// FileInfo - file info structure
 type FileInfo struct {
 	Name   string
 	Type   string
 	Buffer []byte
 }
 
+// InitSendgrid - initialize SendGrid connection
 func InitSendgrid(key string) error {
 	/*
 		clientOptions := sentry.ClientOptions(sentry.ClientOptions{
@@ -40,7 +42,8 @@ func InitSendgrid(key string) error {
 	return nil
 }
 
-func SendGridEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *mail.Email, receipients map[string][]*mail.Email, subject string, dynamicTemplateData map[string]interface{}, files []*FileInfo) (*rest.Response, error) {
+// SendEmail - send an email
+func SendEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *mail.Email, receipients map[string][]*mail.Email, subject string, dynamicTemplateData map[string]interface{}, files []*FileInfo) (*rest.Response, error) {
 	var peopleToEmail, peoplceCcEmail, peoplceBccEmail []*mail.Email
 
 	for _, receipient := range receipients["to"] {

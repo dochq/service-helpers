@@ -15,6 +15,7 @@ func init() {
 	}
 }
 
+// SendRequest - send request
 func SendRequest(method, link, data string, headers map[string]string) (resp *http.Response, body string, err error) {
 	req, err := http.NewRequest(method, link, strings.NewReader(data))
 	if err != nil {
