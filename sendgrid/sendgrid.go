@@ -1,7 +1,6 @@
 package sendgrid
 
 import (
-	"encoding/base64"
 	"fmt"
 	"net/http"
 	"time"
@@ -15,9 +14,9 @@ var sendgridClient *sendgrid.Client
 
 // FileInfo - file info structure
 type FileInfo struct {
-	Name   string
-	Type   string
-	Buffer []byte
+	Name    string
+	Type    string
+	Content string // base64
 }
 
 // InitSendgrid - initialize SendGrid connection
@@ -91,7 +90,7 @@ func SendEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *m
 
 	for _, file := range files {
 		sendData.AddAttachment(&mail.Attachment{
-			Content:     base64.StdEncoding.EncodeToString(file.Buffer),
+			Content:     file.Content,
 			Type:        file.Type,
 			Filename:    file.Name,
 			Disposition: "attachment",
