@@ -65,6 +65,10 @@ func SendEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *m
 	}
 
 	sendData := &mail.SGMailV3{
+		Asm: &mail.Asm{
+			GroupID:         18899,
+			GroupsToDisplay: []int{18899},
+		},
 		TemplateID: sendGridEmailTmpl,
 		From: &mail.Email{
 			Name:    fromEmail.Name,
