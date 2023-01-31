@@ -42,7 +42,7 @@ func InitSendgrid(key string) error {
 }
 
 // SendEmail - send an email
-func SendEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *mail.Email, receipients map[string][]*mail.Email, subject string, dynamicTemplateData map[string]interface{}, files []*FileInfo) (*rest.Response, error) {
+func SendEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *mail.Email, receipients map[string][]*mail.Email, subject string, dynamicTemplateData map[string]interface{}, files []*FileInfo, allowUnsub bool) (*rest.Response, error) {
 	var peopleToEmail, peoplceCcEmail, peoplceBccEmail []*mail.Email
 
 	for _, receipient := range receipients["to"] {
@@ -78,6 +78,13 @@ func SendEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *m
 				DynamicTemplateData: dynamicTemplateData,
 			},
 		},
+	}
+
+	if allowUnsub {
+		sendData.Asm = &mail.Asm{
+			GroupID:         18899, // Marketting unsub (we only use this one)
+			GroupsToDisplay: []int{18899},
+		}
 	}
 
 	if subject != "" {
