@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/dochq/service-helpers/helpers"
 	"github.com/sendgrid/rest"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
@@ -80,10 +81,23 @@ func SendEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *m
 		},
 	}
 
+	var (
+		trackable = false
+	)
+
 	if allowUnsub {
 		sendData.Asm = &mail.Asm{
 			GroupID:         18899, // Marketting unsub (we only use this one)
 			GroupsToDisplay: []int{18899},
+		}
+		trackable = true
+	}
+
+	if !trackable {
+		sendData.TrackingSettings = &mail.TrackingSettings{
+			SubscriptionTracking: &mail.SubscriptionTrackingSetting{
+				Enable: helpers.PointerBool(trackable),
+			},
 		}
 	}
 
