@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/sendgrid/rest v2.6.9+incompatible
-	github.com/sendgrid/sendgrid-go v3.11.1+incompatible
+	github.com/sendgrid/sendgrid-go v3.12.0+incompatible
 	google.golang.org/grpc v1.46.0
 )
 

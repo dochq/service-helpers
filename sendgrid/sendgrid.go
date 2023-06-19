@@ -90,7 +90,8 @@ func SendEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *m
 
 	sendData.TrackingSettings = &mail.TrackingSettings{
 		SubscriptionTracking: &mail.SubscriptionTrackingSetting{
-			Enable: helpers.PointerBool(allowUnsub),
+			Enable:          helpers.PointerBool(allowUnsub),
+			SubstitutionTag: "[unsubscribe_url]",
 		},
 	}
 
