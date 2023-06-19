@@ -81,24 +81,17 @@ func SendEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *m
 		},
 	}
 
-	var (
-		trackable = false
-	)
-
 	if allowUnsub {
 		sendData.Asm = &mail.Asm{
 			GroupID:         18899, // Marketting unsub (we only use this one)
 			GroupsToDisplay: []int{18899},
 		}
-		trackable = true
 	}
 
-	if !trackable {
-		sendData.TrackingSettings = &mail.TrackingSettings{
-			SubscriptionTracking: &mail.SubscriptionTrackingSetting{
-				Enable: helpers.PointerBool(false),
-			},
-		}
+	sendData.TrackingSettings = &mail.TrackingSettings{
+		SubscriptionTracking: &mail.SubscriptionTrackingSetting{
+			Enable: helpers.PointerBool(allowUnsub),
+		},
 	}
 
 	if subject != "" {
