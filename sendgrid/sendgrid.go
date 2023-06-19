@@ -96,7 +96,7 @@ func SendEmail(sendGridEmailTmpl string, headers map[string]string, fromEmail *m
 	if !trackable {
 		sendData.TrackingSettings = &mail.TrackingSettings{
 			SubscriptionTracking: &mail.SubscriptionTrackingSetting{
-				Enable: helpers.PointerBool(trackable),
+				Enable: helpers.PointerBool(false),
 			},
 		}
 	}
